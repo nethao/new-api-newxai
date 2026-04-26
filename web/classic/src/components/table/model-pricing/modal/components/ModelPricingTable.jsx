@@ -79,6 +79,7 @@ const ModelPricingTable = ({
                 ? t('按次计费')
                 : '-',
         priceItems: getModelPriceItems(priceData, t, siteDisplayType),
+        priceData,
       };
     });
 
@@ -130,14 +131,57 @@ const ModelPricingTable = ({
     columns.push({
       title: siteDisplayType === 'TOKENS' ? t('计费摘要') : t('价格摘要'),
       dataIndex: 'priceItems',
-      render: (items) => {
+      render: (items, record) => {
         if (items.length === 1 && items[0].isDynamic) {
           return (
-            <Text type='tertiary' size='small'>
-              {t('见上方动态计费详情')}
+            <Text type="tertiary" size="small">
+              {t("见上方动态计费详情")}
             </Text>
           );
         }
+        if (record?.priceData?.isTieredPerCall && Array.isArray(record.priceData.tierPrices)) {
+          return (
+            <div
+              style={{
+                minWidth: 220,
+                borderRadius: 12,
+                overflow: "hidden",
+                border: "1px solid var(--semi-color-border)",
+                background: "var(--semi-color-bg-1)",
+              }}
+            >
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr',
+                  padding: '10px 12px',
+                  background: 'var(--semi-color-fill-0)',
+                  fontSize: 12,
+                  fontWeight: 600,
+                  color: 'var(--semi-color-text-1)',
+                }}
+              >
+                <div>{t('\u5206\u8FA8\u7387')}</div>
+                <div>{t('\u4EF7\u683C')}</div>
+              </div>
+              {record.priceData.tierPrices.map((tier) => (
+                <div
+                  key={tier.key}
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: '1fr 1fr',
+                    padding: '10px 12px',
+                    borderTop: '1px solid var(--semi-color-border)',
+                  }}
+                >
+                  <div className='font-medium'>{tier.label}</div>
+                  <div className='font-semibold text-orange-600'>{tier.value}</div>
+                </div>
+              ))}
+            </div>
+          );
+        }
+
         return (
           <div className='space-y-1'>
             {items.map((item) => (
@@ -147,6 +191,7 @@ const ModelPricingTable = ({
                 </div>
                 <div className='text-xs text-gray-500'>{item.suffix}</div>
               </div>
+
             ))}
           </div>
         );

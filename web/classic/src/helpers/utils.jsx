@@ -749,6 +749,23 @@ export const calculateModelPrice = ({
 
   if (record.quota_type === 1) {
     // 按次计费
+    if (Array.isArray(record.price_tiers) && record.price_tiers.length > 0) {
+      return {
+        tierPrices: record.price_tiers.map((tier) => ({
+          key: `tier-${String(tier.label).toLowerCase()}`,
+          label: tier.label,
+          value: displayPrice(parseFloat(tier.price) * usedGroupRatio),
+          isTierPrice: true,
+        })),
+        price: '-',
+        isPerToken: false,
+        isTieredPerCall: true,
+        isTokensDisplay: false,
+        usedGroup,
+        usedGroupRatio,
+      };
+    }
+
     const priceUSD = parseFloat(record.model_price) * usedGroupRatio;
     const displayVal = displayPrice(priceUSD);
 
@@ -882,6 +899,18 @@ export const getModelPriceItems = (
         label: t('音频补全价格'),
         value: priceData.audioOutputPrice,
         suffix: unitSuffix,
+      },
+    ].filter((item) => item.value !== null && item.value !== undefined && item.value !== '');
+  }
+
+  if (priceData.isTieredPerCall) {
+    return [
+      {
+        key: 'tiered-summary',
+        label: t('\u5206\u6863\u4EF7\u683C'),
+        value: `${priceData.tierPrices?.length || 0}${t('\u6863')}`,
+        suffix: '',
+        isTierSummary: true,
       },
     ].filter((item) => item.value !== null && item.value !== undefined && item.value !== '');
   }

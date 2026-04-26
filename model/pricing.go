@@ -3,6 +3,7 @@ package model
 import (
 	"encoding/json"
 	"fmt"
+	"sort"
 	"strings"
 
 	"sync"
@@ -35,7 +36,14 @@ type Pricing struct {
 	SupportedEndpointTypes []constant.EndpointType `json:"supported_endpoint_types"`
 	BillingMode            string                  `json:"billing_mode,omitempty"`
 	BillingExpr            string                  `json:"billing_expr,omitempty"`
+	PriceTiers             []PricingTier           `json:"price_tiers,omitempty"`
 	PricingVersion         string                  `json:"pricing_version,omitempty"`
+}
+
+type PricingTier struct {
+	Label          string  `json:"label"`
+	Price          float64 `json:"price"`
+	AliasModelName string  `json:"alias_model_name,omitempty"`
 }
 
 type PricingVendor struct {
@@ -285,7 +293,7 @@ func updatePricing() {
 		}
 	}
 
-	pricingMap = make([]Pricing, 0)
+	rawPricingMap := make([]Pricing, 0)
 	for model, groups := range modelGroupsMap {
 		pricing := Pricing{
 			ModelName:              model,
@@ -337,8 +345,10 @@ func updatePricing() {
 				pricing.BillingExpr = expr
 			}
 		}
-		pricingMap = append(pricingMap, pricing)
+		rawPricingMap = append(rawPricingMap, pricing)
 	}
+
+	pricingMap = aggregateTieredPerCallPricing(rawPricingMap, metaMap)
 
 	// 防止大更新后数据不通用
 	if len(pricingMap) > 0 {
@@ -349,9 +359,17 @@ func updatePricing() {
 	modelEnableGroupsLock.Lock()
 	modelEnableGroups = make(map[string][]string)
 	modelQuotaTypeMap = make(map[string]int)
-	for _, p := range pricingMap {
+	for _, p := range rawPricingMap {
 		modelEnableGroups[p.ModelName] = p.EnableGroup
 		modelQuotaTypeMap[p.ModelName] = p.QuotaType
+	}
+	for _, p := range pricingMap {
+		if _, ok := modelEnableGroups[p.ModelName]; !ok {
+			modelEnableGroups[p.ModelName] = p.EnableGroup
+		}
+		if _, ok := modelQuotaTypeMap[p.ModelName]; !ok {
+			modelQuotaTypeMap[p.ModelName] = p.QuotaType
+		}
 	}
 	modelEnableGroupsLock.Unlock()
 
@@ -361,4 +379,156 @@ func updatePricing() {
 // GetSupportedEndpointMap 返回全局端点到路径的映射
 func GetSupportedEndpointMap() map[string]common.EndpointInfo {
 	return supportedEndpointMap
+}
+
+
+var tierAliasSuffixes = []struct {
+	Suffix    string
+	Label     string
+	SortOrder int
+}{
+	{Suffix: "-512", Label: "512", SortOrder: 0},
+	{Suffix: "-1k", Label: "1K", SortOrder: 1},
+	{Suffix: "-2k", Label: "2K", SortOrder: 2},
+	{Suffix: "-4k", Label: "4K", SortOrder: 3},
+}
+
+type tieredPerCallPricingGroup struct {
+	Items []Pricing
+	Tiers []PricingTier
+}
+
+func parseTieredPerCallAlias(modelName string) (string, PricingTier, bool) {
+	lowerName := strings.ToLower(modelName)
+	for _, suffix := range tierAliasSuffixes {
+		if strings.HasSuffix(lowerName, suffix.Suffix) && len(modelName) > len(suffix.Suffix) {
+			baseName := modelName[:len(modelName)-len(suffix.Suffix)]
+			return baseName, PricingTier{
+				Label:          suffix.Label,
+				AliasModelName: modelName,
+			}, true
+		}
+	}
+	return "", PricingTier{}, false
+}
+
+func pricingTierSortOrder(label string) int {
+	upperLabel := strings.ToUpper(label)
+	for _, suffix := range tierAliasSuffixes {
+		if upperLabel == suffix.Label {
+			return suffix.SortOrder
+		}
+	}
+	return len(tierAliasSuffixes)
+}
+
+func mergeStringSliceUnique(slices ...[]string) []string {
+	merged := make([]string, 0)
+	seen := make(map[string]struct{})
+	for _, slice := range slices {
+		for _, item := range slice {
+			if _, ok := seen[item]; ok {
+				continue
+			}
+			seen[item] = struct{}{}
+			merged = append(merged, item)
+		}
+	}
+	return merged
+}
+
+func mergeEndpointTypesUnique(slices ...[]constant.EndpointType) []constant.EndpointType {
+	merged := make([]constant.EndpointType, 0)
+	seen := make(map[constant.EndpointType]struct{})
+	for _, slice := range slices {
+		for _, item := range slice {
+			if _, ok := seen[item]; ok {
+				continue
+			}
+			seen[item] = struct{}{}
+			merged = append(merged, item)
+		}
+	}
+	return merged
+}
+
+func buildTieredPerCallPricing(baseModel string, group *tieredPerCallPricingGroup, metaMap map[string]*Model) Pricing {
+	merged := group.Items[0]
+	merged.ModelName = baseModel
+	merged.ModelPrice = 0
+	merged.PriceTiers = append([]PricingTier(nil), group.Tiers...)
+	merged.EnableGroup = make([]string, 0)
+	merged.SupportedEndpointTypes = make([]constant.EndpointType, 0)
+
+	for _, item := range group.Items {
+		merged.EnableGroup = mergeStringSliceUnique(merged.EnableGroup, item.EnableGroup)
+		merged.SupportedEndpointTypes = mergeEndpointTypesUnique(merged.SupportedEndpointTypes, item.SupportedEndpointTypes)
+	}
+
+	sort.Slice(merged.PriceTiers, func(i, j int) bool {
+		return pricingTierSortOrder(merged.PriceTiers[i].Label) < pricingTierSortOrder(merged.PriceTiers[j].Label)
+	})
+
+	if meta, ok := metaMap[baseModel]; ok && meta.Status == 1 {
+		merged.Description = meta.Description
+		merged.Icon = meta.Icon
+		merged.Tags = meta.Tags
+		merged.VendorID = meta.VendorID
+	}
+
+	return merged
+}
+
+func aggregateTieredPerCallPricing(rawPricingMap []Pricing, metaMap map[string]*Model) []Pricing {
+	groups := make(map[string]*tieredPerCallPricingGroup)
+	for _, pricing := range rawPricingMap {
+		if pricing.QuotaType != 1 {
+			continue
+		}
+		baseModel, tier, ok := parseTieredPerCallAlias(pricing.ModelName)
+		if !ok {
+			continue
+		}
+		group := groups[baseModel]
+		if group == nil {
+			group = &tieredPerCallPricingGroup{}
+			groups[baseModel] = group
+		}
+		tier.Price = pricing.ModelPrice
+		group.Items = append(group.Items, pricing)
+		group.Tiers = append(group.Tiers, tier)
+	}
+
+	if len(groups) == 0 {
+		return rawPricingMap
+	}
+
+	aggregated := make([]Pricing, 0, len(rawPricingMap))
+	emitted := make(map[string]struct{})
+	for _, pricing := range rawPricingMap {
+		if group, ok := groups[pricing.ModelName]; ok && len(group.Items) >= 2 {
+			if _, seen := emitted[pricing.ModelName]; seen {
+				continue
+			}
+			emitted[pricing.ModelName] = struct{}{}
+			aggregated = append(aggregated, buildTieredPerCallPricing(pricing.ModelName, group, metaMap))
+			continue
+		}
+
+		baseModel, _, ok := parseTieredPerCallAlias(pricing.ModelName)
+		if ok {
+			if group, exists := groups[baseModel]; exists && len(group.Items) >= 2 {
+				if _, seen := emitted[baseModel]; seen {
+					continue
+				}
+				emitted[baseModel] = struct{}{}
+				aggregated = append(aggregated, buildTieredPerCallPricing(baseModel, group, metaMap))
+				continue
+			}
+		}
+
+		aggregated = append(aggregated, pricing)
+	}
+
+	return aggregated
 }

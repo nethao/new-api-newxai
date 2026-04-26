@@ -230,6 +230,11 @@ var (
 	CriticalRateLimitNum            = 20
 	CriticalRateLimitDuration int64 = 20 * 60
 
+	// Per-user payment rate limit for authenticated payment/order creation endpoints.
+	PaymentRateLimitEnable   bool
+	PaymentRateLimitNum            = 20
+	PaymentRateLimitDuration int64 = 20 * 60
+
 	UploadRateLimitNum            = 10
 	UploadRateLimitDuration int64 = 60
 

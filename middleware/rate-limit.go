@@ -108,6 +108,15 @@ func CriticalRateLimit() func(c *gin.Context) {
 	return defNext
 }
 
+// PaymentRateLimit isolates authenticated payment/order creation from the shared
+// critical IP bucket so login/register/token actions do not block checkout.
+func PaymentRateLimit() func(c *gin.Context) {
+	if !common.PaymentRateLimitEnable {
+		return defNext
+	}
+	return userRateLimitFactory(common.PaymentRateLimitNum, common.PaymentRateLimitDuration, "PY")
+}
+
 func DownloadRateLimit() func(c *gin.Context) {
 	return rateLimitFactory(common.DownloadRateLimitNum, common.DownloadRateLimitDuration, "DW")
 }
