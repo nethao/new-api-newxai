@@ -521,7 +521,9 @@ export function SubscriptionPlansCard({
               const totalAmount = Number(plan.total_amount || 0)
               const price = Number(plan.price_amount || 0).toFixed(2)
               const quotaAmountText =
-                totalAmount > 0 ? totalAmount.toLocaleString() : ''
+                totalAmount > 0
+                  ? formatQuota(totalAmount).replace(/^[^\d.-]+/u, '').trim()
+                  : ''
               const isPopular = index === 0 && plans.length > 1
               const limit = Number(plan.max_purchase_per_user || 0)
               const count = planPurchaseCountMap.get(plan.id) || 0
