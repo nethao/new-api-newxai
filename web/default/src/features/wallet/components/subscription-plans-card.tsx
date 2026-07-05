@@ -520,6 +520,8 @@ export function SubscriptionPlansCard({
               if (!plan) return null
               const totalAmount = Number(plan.total_amount || 0)
               const price = Number(plan.price_amount || 0).toFixed(2)
+              const quotaAmountText =
+                totalAmount > 0 ? totalAmount.toLocaleString() : ''
               const isPopular = index === 0 && plans.length > 1
               const limit = Number(plan.max_purchase_per_user || 0)
               const count = planPurchaseCountMap.get(plan.id) || 0
@@ -573,6 +575,11 @@ export function SubscriptionPlansCard({
                       <span className='text-primary text-2xl font-bold'>
                         ￥{price}
                       </span>
+                      {quotaAmountText && (
+                        <div className='text-muted-foreground mt-1 text-sm'>
+                          买 {quotaAmountText} 额度
+                        </div>
+                      )}
                     </div>
 
                     <div className='flex-1 space-y-1.5 pb-3'>
