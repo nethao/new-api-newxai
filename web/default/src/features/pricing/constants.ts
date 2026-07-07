@@ -131,7 +131,7 @@ export const TOKEN_UNIT_DIVISORS = {
 } as const
 
 /** Default token unit for pricing display */
-export const DEFAULT_TOKEN_UNIT: TokenUnit = 'M'
+export const DEFAULT_TOKEN_UNIT: TokenUnit = 'K'
 
 /** View mode options */
 export const VIEW_MODES = {

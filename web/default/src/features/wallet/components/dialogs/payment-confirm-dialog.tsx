@@ -16,7 +16,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 For commercial licensing, please contact support@quantumnous.com
 */
-import { Loader2 } from 'lucide-react'
+import { Gift, Loader2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 import {
@@ -46,6 +46,7 @@ interface PaymentConfirmDialogProps {
   calculating: boolean
   processing: boolean
   discountRate?: number
+  bonusAmount?: number
   usdExchangeRate?: number
 }
 
@@ -59,6 +60,7 @@ export function PaymentConfirmDialog({
   calculating,
   processing,
   discountRate = DEFAULT_DISCOUNT_RATE,
+  bonusAmount = 0,
   usdExchangeRate = 1,
 }: PaymentConfirmDialogProps) {
   const { t } = useTranslation()
@@ -118,6 +120,38 @@ export function PaymentConfirmDialog({
                 <span className='text-muted-foreground'>{t('You save')}</span>
                 <span className='font-semibold text-green-600'>
                   {formatCurrency(discountAmount)}
+                </span>
+              </div>
+            </div>
+          )}
+
+          {bonusAmount > 0 && (
+            <div className='rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-emerald-700 dark:border-emerald-900/60 dark:bg-emerald-950/30 dark:text-emerald-300'>
+              <div className='flex items-center justify-between gap-3 text-sm'>
+                <span className='flex items-center gap-1.5 font-medium'>
+                  <Gift className='h-4 w-4' />
+                  {t('Bonus amount')}
+                </span>
+                <span className='font-semibold'>
+                  +
+                  {formatLocalCurrencyAmount(bonusAmount * usdExchangeRate, {
+                    digitsLarge: 2,
+                    digitsSmall: 2,
+                    abbreviate: false,
+                  })}
+                </span>
+              </div>
+              <div className='mt-2 flex items-center justify-between text-sm'>
+                <span>{t('Total credited')}</span>
+                <span className='font-semibold'>
+                  {formatLocalCurrencyAmount(
+                    (topupAmount + bonusAmount) * usdExchangeRate,
+                    {
+                      digitsLarge: 2,
+                      digitsSmall: 2,
+                      abbreviate: false,
+                    }
+                  )}
                 </span>
               </div>
             </div>

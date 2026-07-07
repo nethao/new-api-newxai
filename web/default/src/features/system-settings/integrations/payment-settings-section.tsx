@@ -59,6 +59,7 @@ import { SettingsSection } from '../components/settings-section'
 import { useUpdateOption } from '../hooks/use-update-option'
 import { safeNumberFieldProps } from '../utils/numeric-field'
 import { AmountDiscountVisualEditor } from './amount-discount-visual-editor'
+import { AmountBonusVisualEditor } from './amount-bonus-visual-editor'
 import { AmountOptionsVisualEditor } from './amount-options-visual-editor'
 import { CreemProductsVisualEditor } from './creem-products-visual-editor'
 import { PaymentMethodsVisualEditor } from './payment-methods-visual-editor'
@@ -129,6 +130,19 @@ const paymentSchema = z.object({
     }
   }),
   AmountDiscount: z.string().superRefine((value, ctx) => {
+    const error = getJsonError(
+      value,
+      (parsed) =>
+        !!parsed && typeof parsed === 'object' && !Array.isArray(parsed)
+    )
+    if (error) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: error,
+      })
+    }
+  }),
+  AmountBonus: z.string().superRefine((value, ctx) => {
     const error = getJsonError(
       value,
       (parsed) =>
@@ -243,6 +257,8 @@ export function PaymentSettingsSection({
     React.useState(true)
   const [amountDiscountVisualMode, setAmountDiscountVisualMode] =
     React.useState(true)
+  const [amountBonusVisualMode, setAmountBonusVisualMode] =
+    React.useState(true)
   const [creemProductsVisualMode, setCreemProductsVisualMode] =
     React.useState(true)
   const [showComplianceDialog, setShowComplianceDialog] = React.useState(false)
@@ -355,6 +371,7 @@ export function PaymentSettingsSection({
       PayMethods: formatJsonForEditor(initialFormValues.PayMethods),
       AmountOptions: formatJsonForEditor(initialFormValues.AmountOptions),
       AmountDiscount: formatJsonForEditor(initialFormValues.AmountDiscount),
+      AmountBonus: formatJsonForEditor(initialFormValues.AmountBonus),
       CreemProducts: formatJsonForEditor(initialFormValues.CreemProducts),
     },
   })
@@ -412,6 +429,7 @@ export function PaymentSettingsSection({
       PayMethods: formatJsonForEditor(parsedDefaults.PayMethods),
       AmountOptions: formatJsonForEditor(parsedDefaults.AmountOptions),
       AmountDiscount: formatJsonForEditor(parsedDefaults.AmountDiscount),
+      AmountBonus: formatJsonForEditor(parsedDefaults.AmountBonus),
       CreemProducts: formatJsonForEditor(parsedDefaults.CreemProducts),
     })
   }, [defaultsSignature, form])
@@ -427,6 +445,7 @@ export function PaymentSettingsSection({
       PayMethods: values.PayMethods.trim(),
       AmountOptions: values.AmountOptions.trim(),
       AmountDiscount: values.AmountDiscount.trim(),
+      AmountBonus: values.AmountBonus.trim(),
       StripeApiSecret: values.StripeApiSecret.trim(),
       StripeWebhookSecret: values.StripeWebhookSecret.trim(),
       StripePriceId: values.StripePriceId.trim(),
@@ -471,6 +490,7 @@ export function PaymentSettingsSection({
       PayMethods: initialRef.current.PayMethods.trim(),
       AmountOptions: initialRef.current.AmountOptions.trim(),
       AmountDiscount: initialRef.current.AmountDiscount.trim(),
+      AmountBonus: initialRef.current.AmountBonus.trim(),
       StripeApiSecret: initialRef.current.StripeApiSecret.trim(),
       StripeWebhookSecret: initialRef.current.StripeWebhookSecret.trim(),
       StripePriceId: initialRef.current.StripePriceId.trim(),
@@ -559,6 +579,16 @@ export function PaymentSettingsSection({
       updates.push({
         key: 'payment_setting.amount_discount',
         value: sanitized.AmountDiscount,
+      })
+    }
+
+    if (
+      normalizeJsonForComparison(sanitized.AmountBonus) !==
+      normalizeJsonForComparison(initial.AmountBonus)
+    ) {
+      updates.push({
+        key: 'payment_setting.amount_bonus',
+        value: sanitized.AmountBonus,
       })
     }
 
@@ -1119,6 +1149,62 @@ export function PaymentSettingsSection({
                     )}
                   />
                 </div>
+
+                <FormField
+                  control={form.control}
+                  name='AmountBonus'
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className='mb-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between'>
+                        <FormLabel>{t('充值赠送额度')}</FormLabel>
+                        <Button
+                          type='button'
+                          variant='outline'
+                          size='sm'
+                          onClick={() =>
+                            setAmountBonusVisualMode(!amountBonusVisualMode)
+                          }
+                          className='w-full sm:w-auto'
+                        >
+                          {amountBonusVisualMode ? (
+                            <>
+                              <Code2 className='mr-2 h-3 w-3' />
+                              {t('JSON 编辑')}
+                            </>
+                          ) : (
+                            <>
+                              <Eye className='mr-2 h-3 w-3' />
+                              {t('可视化编辑')}
+                            </>
+                          )}
+                        </Button>
+                      </div>
+                      <FormControl>
+                        {amountBonusVisualMode ? (
+                          <AmountBonusVisualEditor
+                            value={field.value}
+                            onChange={field.onChange}
+                          />
+                        ) : (
+                          <Textarea
+                            rows={4}
+                            placeholder='{"100":50,"200":120}'
+                            {...field}
+                            onChange={(event) =>
+                              field.onChange(event.target.value)
+                            }
+                          />
+                        )}
+                      </FormControl>
+                      <FormDescription>
+                        {t(
+                          '按充值金额配置赠送额度。例如：100 -> 50 表示充值 100，到账 150 额度。'
+                        )}
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
             </TabsContent>
 

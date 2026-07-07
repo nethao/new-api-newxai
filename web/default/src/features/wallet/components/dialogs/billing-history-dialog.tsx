@@ -247,6 +247,16 @@ export function BillingHistoryDialog({
                               abbreviate: false,
                             })}
                           </div>
+                          {(record.bonus_amount || 0) > 0 && (
+                            <div className='text-xs font-medium text-emerald-600'>
+                              {t('Bonus')} +
+                              {formatCurrencyFromUSD(record.bonus_amount || 0, {
+                                digitsLarge: 2,
+                                digitsSmall: 2,
+                                abbreviate: false,
+                              })}
+                            </div>
+                          )}
                         </div>
                         <div className='space-y-1'>
                           <Label className='text-muted-foreground text-xs'>

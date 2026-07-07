@@ -134,6 +134,8 @@ export interface TopupInfo {
   amount_options: number[]
   /** Discount rates by amount */
   discount: Record<number, number>
+  /** Bonus quota by amount */
+  bonus: Record<number, number>
   /** Optional topup link for purchasing codes */
   topup_link?: string
   /** Whether Creem topup is enabled */
@@ -166,6 +168,8 @@ export interface PresetAmount {
   value: number
   /** Optional discount rate (0-1) */
   discount?: number
+  /** Optional bonus amount */
+  bonus?: number
 }
 
 /**
@@ -259,6 +263,8 @@ export interface TopupRecord {
   user_id: number
   /** Topup amount (quota) */
   amount: number
+  /** Bonus amount credited by promotion */
+  bonus_amount?: number
   /** Payment amount (actual money paid) */
   money: number
   /** Trade/order number */

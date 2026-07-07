@@ -1,0 +1,59 @@
+<svg width="920" height="560" viewBox="0 0 920 560" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="ticketBg" x1="0" y1="0" x2="150" y2="34" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF1F2"/>
+      <stop offset="1" stop-color="#FFF7ED"/>
+    </linearGradient>
+    <filter id="tagShadow" x="-20%" y="-80%" width="140%" height="260%" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#F84649" flood-opacity="0.14"/>
+    </filter>
+  </defs>
+
+  <rect width="920" height="560" fill="#f7f7f7"/>
+  <rect x="34" y="34" width="852" height="492" rx="24" fill="#ffffff" stroke="#e5e5e5"/>
+  <text x="72" y="84" fill="#171717" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="26" font-weight="700">订阅套餐</text>
+  <text x="72" y="116" fill="#737373" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="16">订阅套餐以获取模型访问权限</text>
+
+  <rect x="72" y="154" width="360" height="318" rx="18" fill="#ffffff" stroke="#e5e5e5"/>
+  <text x="100" y="206" fill="#171717" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="20" font-weight="700">尊享月卡</text>
+  <text x="100" y="232" fill="#737373" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="15">适合高频使用、AI工具及开发者</text>
+
+  <g transform="translate(100 264)">
+    <g filter="url(#tagShadow)">
+      <rect x="154" y="-30" width="146" height="34" rx="17" fill="url(#ticketBg)" stroke="#fecdd3"/>
+      <g transform="translate(166 -24) scale(0.022)">
+        <path d="M309.95456 780.40576h-207.0016a29.568 29.568 0 0 1-29.568-29.56288v-207.00672c32.66048 0.01536 59.15136-26.45504 59.16672-59.11552 0.01024-32.6656-26.45504-59.15648-59.12064-59.16672h-0.04608V218.55744a29.56288 29.56288 0 0 1 29.568-29.568h206.99648l0.00512 591.41632z" fill="#F84649"/>
+        <path d="M552.82176 372.69504m-48 0a48 48 0 1 0 96 0 48 48 0 1 0-96 0Z" fill="#F84649"/>
+        <path d="M930.93888 248.12544a29.56288 29.56288 0 0 1 29.568-29.568 29.568 29.568 0 0 0-29.568-29.568H369.09056v591.4112h561.85344a29.568 29.568 0 0 0 29.56288-29.568 29.568 29.568 0 1 1 0-59.136v-59.14624a29.568 29.568 0 1 1 0-59.13088v-59.14112a29.568 29.568 0 1 1 0-59.136V395.9808a29.568 29.568 0 1 1 0-59.14112V277.69856a29.568 29.568 0 0 1-29.568-29.57312z m-378.11712 44.5696c44.20096 0 80 35.79904 80 80s-35.79904 80-80 80c-44.20608 0-80-35.79904-80-80s35.79392-80 80-80z m224 384c-44.20608 0-80-35.79904-80-80s35.79392-80 80-80c44.20096 0 80 35.79904 80 80s-35.80928 80-80 80z m75.38688-356.59776l-352 352c-3.2 3.2-7.19872 4.58752-11.40224 4.58752a16.60416 16.60416 0 0 1-11.40224-4.58752 16.05632 16.05632 0 0 1 0-22.59968l352-352a16.05632 16.05632 0 0 1 22.59968 0c6.41024 6.1952 6.41024 16.19968 0.2048 22.59968z" fill="#F84649"/>
+        <path d="M776.82176 596.69504m-48 0a48 48 0 1 0 96 0 48 48 0 1 0-96 0Z" fill="#F84649"/>
+      </g>
+      <text x="195" y="-9" fill="#F84649" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="13" font-weight="800">限时优惠 · 立省 ￥140</text>
+    </g>
+
+    <text x="0" y="34" fill="#e11d48" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="36" font-weight="800">￥580.00</text>
+    <g transform="translate(0 54)">
+      <text x="0" y="0" fill="#9ca3af" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="15">原价 ￥720.00</text>
+      <line x1="38" y1="-5" x2="131" y2="-5" stroke="#9ca3af" stroke-width="2" stroke-linecap="round"/>
+    </g>
+    <text x="0" y="94" fill="#737373" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="15">买 3,600 额度</text>
+  </g>
+
+  <text x="100" y="392" fill="#404040" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="15">✓ 有效期: 1个月</text>
+  <text x="100" y="422" fill="#404040" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="15">✓ 总额度: 💧 3,600</text>
+  <text x="100" y="452" fill="#404040" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="15">✓ 升级分组: codex_vip</text>
+  <line x1="100" y1="474" x2="404" y2="474" stroke="#e5e5e5"/>
+  <rect x="100" y="492" width="304" height="42" rx="21" fill="#111827"/>
+  <text x="252" y="519" text-anchor="middle" fill="#ffffff" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="16" font-weight="700">立即订阅</text>
+
+  <rect x="488" y="154" width="360" height="318" rx="18" fill="#ffffff" stroke="#e5e5e5"/>
+  <text x="516" y="206" fill="#171717" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="20" font-weight="700">轻享月卡</text>
+  <text x="516" y="232" fill="#737373" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="15">适合日常体验或短期使用</text>
+  <text x="516" y="298" fill="#171717" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="34" font-weight="800">￥360.00</text>
+  <text x="518" y="328" fill="#737373" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="15">买 1,800 额度</text>
+  <text x="516" y="392" fill="#404040" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="15">✓ 有效期: 1个月</text>
+  <text x="516" y="422" fill="#404040" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="15">✓ 总额度: 💧 1,800</text>
+  <text x="516" y="452" fill="#404040" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="15">✓ 升级分组: codex_vip</text>
+  <line x1="516" y1="474" x2="820" y2="474" stroke="#e5e5e5"/>
+  <rect x="516" y="492" width="304" height="42" rx="21" fill="#ffffff" stroke="#d4d4d4"/>
+  <text x="668" y="519" text-anchor="middle" fill="#171717" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="16" font-weight="700">立即订阅</text>
+</svg>

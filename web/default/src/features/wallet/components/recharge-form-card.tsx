@@ -225,6 +225,8 @@ export function RechargeFormCard({
                         preset.discount ||
                         topupInfo?.discount?.[preset.value] ||
                         1.0
+                      const bonus =
+                        preset.bonus || topupInfo?.bonus?.[preset.value] || 0
                       const {
                         displayValue,
                         actualPrice,
@@ -258,8 +260,26 @@ export function RechargeFormCard({
                               </div>
                             )}
                           </div>
-                          <div className='text-muted-foreground mt-1.5 w-full text-xs sm:mt-2'>
-                            Pay {formatCurrency(actualPrice)}
+                          <div className='text-muted-foreground mt-1.5 w-full min-w-0 text-[11px] leading-tight sm:mt-2 sm:text-xs'>
+                            {bonus > 0 && (
+                              <div className='flex min-w-0 items-center gap-1 text-emerald-600'>
+                                  <Gift className='h-3 w-3 shrink-0' />
+                                <span className='min-w-0 truncate'>
+                                  充值 {formatNumber(actualPrice)} 元 · 赠送{' '}
+                                  {formatNumber(bonus * usdExchangeRate)} 元 ·
+                                  到账{' '}
+                                  {formatNumber(
+                                    displayValue + bonus * usdExchangeRate
+                                  )}{' '}
+                                  元
+                                </span>
+                              </div>
+                            )}
+                            {bonus <= 0 && (
+                              <span className='block truncate'>
+                                充值 {formatNumber(actualPrice)} 元
+                              </span>
+                            )}
                             {hasDiscount && savedAmount > 0 && (
                               <span className='text-green-600'>
                                 {' '}
@@ -304,6 +324,30 @@ export function RechargeFormCard({
                     )}
                   </div>
                 </div>
+                {(topupInfo?.bonus?.[topupAmount] || 0) > 0 && (
+                  <div className='flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-xs font-medium text-emerald-600'>
+                    <Gift className='h-3.5 w-3.5 shrink-0' />
+                    <span>
+                      充值 {formatNumber(topupAmount * usdExchangeRate)} 元
+                    </span>
+                    <span>
+                      赠送{' '}
+                      {formatNumber(
+                        (topupInfo?.bonus?.[topupAmount] || 0) *
+                          usdExchangeRate
+                      )}{' '}
+                      元
+                    </span>
+                    <span>
+                      到账{' '}
+                      {formatNumber(
+                        (topupAmount + (topupInfo?.bonus?.[topupAmount] || 0)) *
+                          usdExchangeRate
+                      )}{' '}
+                      元
+                    </span>
+                  </div>
+                )}
               </div>
 
               <div className='space-y-2.5 sm:space-y-3'>

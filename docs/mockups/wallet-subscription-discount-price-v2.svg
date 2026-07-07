@@ -1,0 +1,57 @@
+<svg width="920" height="560" viewBox="0 0 920 560" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="deal" x1="0" y1="0" x2="128" y2="34" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FF3D71"/>
+      <stop offset="0.55" stop-color="#FF6A3D"/>
+      <stop offset="1" stop-color="#FFB020"/>
+    </linearGradient>
+    <filter id="softShadow" x="-20%" y="-60%" width="140%" height="220%" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#F97316" flood-opacity="0.22"/>
+    </filter>
+  </defs>
+
+  <rect width="920" height="560" fill="#f7f7f7"/>
+  <rect x="34" y="34" width="852" height="492" rx="24" fill="#ffffff" stroke="#e5e5e5"/>
+  <text x="72" y="84" fill="#171717" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="26" font-weight="700">订阅套餐</text>
+  <text x="72" y="116" fill="#737373" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="16">订阅套餐以获取模型访问权限</text>
+
+  <rect x="72" y="154" width="360" height="318" rx="18" fill="#ffffff" stroke="#e5e5e5"/>
+  <text x="100" y="206" fill="#171717" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="20" font-weight="700">尊享月卡</text>
+  <text x="100" y="232" fill="#737373" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="15">适合高频使用、AI工具及开发者</text>
+
+  <g transform="translate(100 264)">
+    <g filter="url(#softShadow)">
+      <rect x="156" y="-30" width="126" height="34" rx="17" fill="url(#deal)"/>
+      <rect x="159" y="-27" width="120" height="28" rx="14" stroke="white" stroke-opacity="0.36"/>
+      <circle cx="171" cy="-13" r="4" fill="white" fill-opacity="0.45"/>
+      <circle cx="267" cy="-13" r="4" fill="white" fill-opacity="0.45"/>
+    </g>
+    <text x="219" y="-10" text-anchor="middle" fill="#ffffff" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="13" font-weight="800">限时优惠 · 立省 ￥140</text>
+
+    <text x="0" y="34" fill="#e11d48" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="36" font-weight="800">￥580.00</text>
+    <g transform="translate(0 54)">
+      <text x="0" y="0" fill="#9ca3af" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="15">原价 ￥720.00</text>
+      <line x1="38" y1="-5" x2="131" y2="-5" stroke="#9ca3af" stroke-width="2" stroke-linecap="round"/>
+    </g>
+    <text x="0" y="94" fill="#737373" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="15">买 3,600 额度</text>
+  </g>
+
+  <text x="100" y="392" fill="#404040" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="15">✓ 有效期: 1个月</text>
+  <text x="100" y="422" fill="#404040" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="15">✓ 总额度: 💧 3,600</text>
+  <text x="100" y="452" fill="#404040" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="15">✓ 升级分组: codex_vip</text>
+  <line x1="100" y1="474" x2="404" y2="474" stroke="#e5e5e5"/>
+  <rect x="100" y="492" width="304" height="42" rx="21" fill="#111827"/>
+  <text x="252" y="519" text-anchor="middle" fill="#ffffff" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="16" font-weight="700">立即订阅</text>
+
+  <rect x="488" y="154" width="360" height="318" rx="18" fill="#ffffff" stroke="#e5e5e5"/>
+  <text x="516" y="206" fill="#171717" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="20" font-weight="700">轻享月卡</text>
+  <text x="516" y="232" fill="#737373" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="15">适合日常体验或短期使用</text>
+  <text x="516" y="298" fill="#171717" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="34" font-weight="800">￥360.00</text>
+  <text x="518" y="328" fill="#737373" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="15">买 1,800 额度</text>
+  <text x="516" y="392" fill="#404040" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="15">✓ 有效期: 1个月</text>
+  <text x="516" y="422" fill="#404040" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="15">✓ 总额度: 💧 1,800</text>
+  <text x="516" y="452" fill="#404040" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="15">✓ 升级分组: codex_vip</text>
+  <line x1="516" y1="474" x2="820" y2="474" stroke="#e5e5e5"/>
+  <rect x="516" y="492" width="304" height="42" rx="21" fill="#ffffff" stroke="#d4d4d4"/>
+  <text x="668" y="519" text-anchor="middle" fill="#171717" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="16" font-weight="700">立即订阅</text>
+</svg>
