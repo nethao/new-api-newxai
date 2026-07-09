@@ -1276,8 +1276,7 @@ export function ModelDetails() {
     usdExchangeRate,
   } = usePricingData()
 
-  const tokenUnit: TokenUnit =
-    search.tokenUnit === 'K' ? 'K' : DEFAULT_TOKEN_UNIT
+  const tokenUnit: TokenUnit = search.tokenUnit ?? DEFAULT_TOKEN_UNIT
 
   const model = useMemo(() => {
     if (!models || !modelId) return null
