@@ -250,23 +250,17 @@ export function RechargeFormCard({
                           )}
                           onClick={() => onSelectPreset(preset)}
                         >
-                          <div className='flex w-full items-center justify-between'>
+                          <div className='flex w-full min-w-0 items-center justify-between gap-2'>
                             <div className='text-base font-semibold sm:text-lg'>
                               {formatNumber(displayValue)}
                             </div>
-                            {hasDiscount && (
-                              <div className='text-xs font-medium text-green-600'>
-                                {getDiscountLabel(discount)}
-                              </div>
-                            )}
-                          </div>
-                          <div className='text-muted-foreground mt-1.5 w-full min-w-0 text-[11px] leading-tight sm:mt-2 sm:text-xs'>
                             {bonus > 0 && (
-                              <div className='flex min-w-0 items-center gap-1 text-emerald-600'>
+                              <div className='ml-auto flex shrink-0 flex-col items-end gap-1 text-[10px] leading-none sm:text-[11px]'>
+                                <span className='flex items-center gap-1 whitespace-nowrap text-emerald-600'>
                                   <Gift className='h-3 w-3 shrink-0' />
-                                <span className='min-w-0 truncate'>
-                                  充值 {formatNumber(actualPrice)} 元 · 赠送{' '}
-                                  {formatNumber(bonus * usdExchangeRate)} 元 ·
+                                  赠 {formatNumber(bonus * usdExchangeRate)} 元
+                                </span>
+                                <span className='text-muted-foreground whitespace-nowrap'>
                                   到账{' '}
                                   {formatNumber(
                                     displayValue + bonus * usdExchangeRate
@@ -275,18 +269,27 @@ export function RechargeFormCard({
                                 </span>
                               </div>
                             )}
-                            {bonus <= 0 && (
-                              <span className='block truncate'>
-                                充值 {formatNumber(actualPrice)} 元
-                              </span>
-                            )}
-                            {hasDiscount && savedAmount > 0 && (
-                              <span className='text-green-600'>
-                                {' '}
-                                • Save {formatCurrency(savedAmount)}
-                              </span>
+                            {hasDiscount && bonus <= 0 && (
+                              <div className='text-xs font-medium text-green-600'>
+                                {getDiscountLabel(discount)}
+                              </div>
                             )}
                           </div>
+                          {(bonus <= 0 ||
+                            (hasDiscount && savedAmount > 0)) && (
+                            <div className='text-muted-foreground mt-1.5 w-full min-w-0 text-[11px] leading-tight sm:mt-2 sm:text-xs'>
+                              {bonus <= 0 && (
+                                <span className='block truncate'>
+                                  充值 {formatNumber(actualPrice)} 元
+                                </span>
+                              )}
+                              {hasDiscount && savedAmount > 0 && (
+                                <span className='text-green-600'>
+                                  省 {formatCurrency(savedAmount)}
+                                </span>
+                              )}
+                            </div>
+                          )}
                         </Button>
                       )
                     })}
