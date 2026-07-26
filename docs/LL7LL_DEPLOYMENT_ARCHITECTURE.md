@@ -7,8 +7,13 @@ This project is a fork-based secondary development setup for `new-api`.
 - Official upstream repository: `https://github.com/QuantumNous/new-api.git`
 - Fork repository: `https://github.com/nethao/new-api-newxai.git`
 - Local source directory: `H:\github\服务器运维\new-api二开\ll7ll`
-- Production server SSH alias: `VPS-TOKYO`
-- Production host name observed: `s58702`
+- Production server SSH alias: `MYNEW`
+- Production host name observed: `bangbang-oyoq-01.evoxt.com`
+
+> **Current routing (updated 2026-07-27):** `x.ll7ll.top` and
+> `x.newxai.cc` run directly on `MYNEW`. The former `VPS-TOKYO`
+> containers must remain stopped; never deploy or synchronize the X New API
+> stack from Tokyo to MYNEW.
 
 The current workflow should be:
 
@@ -136,10 +141,10 @@ Current application container:
 x-new-api-app-1
 ```
 
-Current image:
+Current image (deployed 2026-07-27):
 
 ```text
-new-api-custom:v1.0.0-rc.15-custom-20260702
+new-api-custom:v1.0.0-rc.21-custom-20260727-9b3be2f-r2
 ```
 
 Current exposed mapping:
@@ -250,8 +255,8 @@ This keeps code, image version, and server deployment easy to trace and rollback
 Use these for read-only checks:
 
 ```bash
-ssh VPS-TOKYO "docker ps --format 'table {{.Names}}\t{{.Image}}\t{{.Ports}}\t{{.Status}}'"
-ssh VPS-TOKYO "cd /opt/apps/x-new-api && docker compose ps"
-ssh VPS-TOKYO "grep -n -A 40 -B 5 'x.ll7ll.top\|x.newxai.cc' /etc/caddy/Caddyfile"
-ssh VPS-TOKYO "curl -s http://127.0.0.1:3002/api/status"
+ssh MYNEW "docker ps --format 'table {{.Names}}\t{{.Image}}\t{{.Ports}}\t{{.Status}}'"
+ssh MYNEW "cd /opt/apps/x-new-api && docker compose ps"
+ssh MYNEW "grep -n -A 40 -B 5 'x.ll7ll.top\|x.newxai.cc' /etc/caddy/Caddyfile"
+ssh MYNEW "curl -s http://127.0.0.1:3002/api/status"
 ```
