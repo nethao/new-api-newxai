@@ -141,10 +141,10 @@ Current application container:
 x-new-api-app-1
 ```
 
-Current image (deployed 2026-07-27):
+Current image (deployed 2026-08-08):
 
 ```text
-new-api-custom:v1.0.0-rc.21-custom-20260727-9b3be2f-r2
+new-api-custom:v1.0.0-rc.24-custom-20260808-def7d5f
 ```
 
 Current exposed mapping:
